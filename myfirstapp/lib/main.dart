@@ -1,38 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:myfirstapp/quiz.dart';
+import 'package:myfirstapp/question.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  var questionCounter = 0;
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _MyAppState();
+  }
+}
 
-  void answerQuestion() {
-    questionCounter = questionCounter + 1;
-    print(questionCounter);
+class _MyAppState extends State<MyApp> {
+  var _questionCounter = 0;
+
+  void _answerQuestion() {
+    setState(() {
+      _questionCounter = _questionCounter + 1;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    var questions = ["What is a goat? ", "What is a sheep?"];
+    var question = questions();
+    var answer = answers();
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Hang-man"),
+          title: Center(
+            child: Text("QUIZZY"),
+          ),
         ),
         body: Column(
           children: [
-            Text(questions[questionCounter]),
-            // Text('$checkCorrect'),
+            QuestionText(question[_questionCounter]),
             ElevatedButton(
-              child: Text('An animal'),
-              onPressed: answerQuestion,
+              child: AnswerText(answer[_questionCounter][0]),
+              onPressed: _answerQuestion,
             ),
             ElevatedButton(
-              child: Text('A motor bike'),
-              onPressed: answerQuestion,
+              child: AnswerText(answer[_questionCounter][1]),
+              onPressed: _answerQuestion,
             ),
-            ElevatedButton(child: Text('A student'), onPressed: answerQuestion),
+            ElevatedButton(
+                child: AnswerText(answer[_questionCounter][2]),
+                onPressed: _answerQuestion),
           ],
         ),
       ),
