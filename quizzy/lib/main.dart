@@ -32,6 +32,7 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Center(
             child: Text("QUIZZY"),
+            
           ),
         ),
         body: Column(

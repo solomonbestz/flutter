@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AnswerText extends StatelessWidget {
   final String answer;
-  var answerQuestion;
+  dynamic answerQuestion;
 
   AnswerText(this.answer, this.answerQuestion);
 
