@@ -32,8 +32,9 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Center(
             child: Text("QUIZZY"),
-            
           ),
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
         ),
         body: Column(
           children: [
@@ -43,6 +44,7 @@ class _MyAppState extends State<MyApp> {
             AnswerText(answer[_questionCounter][2], _answerQuestion),
           ],
         ),
+        backgroundColor: Colors.lightGreen,
       ),
     );
   }
