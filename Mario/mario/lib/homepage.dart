@@ -1,7 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mario/button.dart';
+import 'package:mario/jumpingmario.dart';
 import 'package:mario/mario.dart';
 import 'dart:async';
+
+import 'package:mario/resetstance.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,19 +21,26 @@ class _HomePageState extends State<HomePage> {
   double initial_height = marioY;
   String direction = 'Right';
   bool midrun = false;
+  bool midjump = false;
 
   void preJump() {
     time = 0;
     initial_height = marioY;
+    ResetStance(
+      direction: direction,
+    );
   }
 
   void jump() {
+    midjump = true;
     preJump();
     Timer.periodic(Duration(milliseconds: 50), (timer) {
       time += 0.05;
       height = -4.9 * time * time + 5 * time;
 
       if (initial_height - height > 1) {
+        midjump = false;
+        timer.cancel();
         setState(() {
           marioY = 1;
         });
@@ -42,17 +54,37 @@ class _HomePageState extends State<HomePage> {
 
   void moveRight() {
     direction = "right";
-    midrun = !midrun;
-    setState(() {
-      marioX += 0.02;
+
+    Timer.periodic(Duration(milliseconds: 50), (timer) {
+      if (MyButton().userIsHoldingButton() == true) {
+        setState(() {
+          marioX += 0.02;
+          midrun = !midrun;
+        });
+      } else {
+        setState(() {
+          Container(
+          width: 50,
+          height: 50,
+          child: Image.asset('lib/images/standingmario.png'));
+        });
+        timer.cancel();
+      }
     });
   }
 
   void moveLeft() {
     direction = "left";
-    midrun = !midrun;
-    setState(() {
-      marioX -= 0.02;
+    Timer.periodic(Duration(milliseconds: 50), (timer) {
+      if (MyButton().userIsHoldingButton() == true) {
+        setState(() {
+          marioX -= 0.02;
+          midrun = !midrun;
+        });
+      } else {
+        timer.cancel();
+        midrun = false;
+      }
     });
   }
 
@@ -67,10 +99,14 @@ class _HomePageState extends State<HomePage> {
             child: AnimatedContainer(
               alignment: Alignment(marioX, marioY),
               duration: Duration(milliseconds: 0),
-              child: MyMario(
-                direction: direction,
-                midrun: midrun,
-              ),
+              child: midjump
+                  ? JumpingMario(
+                      direction: direction,
+                    )
+                  : MyMario(
+                      direction: direction,
+                      midrun: midrun,
+                    ),
             ),
           )),
       Expanded(
